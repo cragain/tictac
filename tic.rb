@@ -13,6 +13,7 @@ def initialize_board
 end
 
 def draw_board(b)
+  system 'clear'
   puts " #{b[1]} | #{b[2]} | #{b[3]} "
   puts "------------"
   puts " #{b[4]} | #{b[5]} | #{b[6]} "
@@ -35,23 +36,39 @@ end
 def computer_picks_square(b)
   position = empty_squares(b).sample
   b[position] = 'O'
+end
 
+def check_winner(b)
+winning_lines = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,5,9], [1,5,9], [3,5,7]]
+  winning_lines.each do |line|
+    if b[line[0]] == 'X' and b[line[1]] == 'X' and b[line[2]] == 'X' 
+      return "Player Wins"
+    elsif b[line[0]] == 'O' and b[line[1]] == 'O' and b[line[2]] == 'O'
+      return "Computer Wins"
+    else
+      return nil
+    end
+  end
 end
 
 
+
+
+
 board = initialize_board
-
-
 draw_board(board)
-player_picks_square(board)
-draw_board(board)
-computer_picks_square(board)
-draw_board(board)
-player_picks_square(board)
-draw_board(board)
-computer_picks_square(board)
 
 begin
+  player_picks_square(board)
+  draw_board(board)
+  computer_picks_square(board)
+  draw_board(board)
+  winner = check_winner(board)
 
+end until winner || empty_squares(board).empty?
 
-end until winner || all_squares_taken?
+if winner
+  puts "You Win!"
+else
+  puts "You Tie"
+end
